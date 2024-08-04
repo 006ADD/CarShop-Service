@@ -1,0 +1,14 @@
+CarShopApplication.class
+services\AuditService.class
+services\UserService.class
+services\EmployeeService.class
+services\CarService.class
+model\Car.class
+model\Order.class
+model\Role.class
+services\ClientService.class
+model\AuditLog.class
+model\SerRequest.class
+services\ServiceRequest.class
+services\OrderService.class
+model\User.class
