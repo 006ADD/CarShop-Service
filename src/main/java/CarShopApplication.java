@@ -594,7 +594,7 @@ public class CarShopApplication {
             scanner.nextLine();
         }
 
-        User client = new User(userService.getAllUsers().size() + 1, username, "клиент", contactInfo, password);
+        User client = new User(userService.getAllUsers().size() + 1, username, "client", contactInfo, password);
         userService.registerUser(client);
         System.out.println("The client has been successfully added.");
         auditService.logAction(currentUser, "A new client has been added: " + username);
