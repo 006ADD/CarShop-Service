@@ -1,7 +1,6 @@
 package services;
 
-import model.SerRequest;
-import services.ServiceRequest;
+import model.ServiceRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,21 +8,21 @@ import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServiceRequestTest {
+public class RequestServiceTest {
 
-    private ServiceRequest serviceRequestService;
+    private RequestService serviceRequestService;
 
     @BeforeEach
     public void setUp() {
-        serviceRequestService = new ServiceRequest();
+        serviceRequestService = new RequestService();
     }
 
     @Test
     public void shouldCreateServiceRequest() {
-        SerRequest request = new SerRequest(1, "Oil change");
+        ServiceRequest request = new ServiceRequest(1, "Oil change");
         serviceRequestService.createServiceRequest(request);
 
-        SerRequest retrievedRequest = serviceRequestService.getServiceRequestById(1);
+        ServiceRequest retrievedRequest = serviceRequestService.getServiceRequestById(1);
         assertThat(retrievedRequest).isNotNull();
         assertThat(retrievedRequest.getId()).isEqualTo(1);
         assertThat(retrievedRequest.getDescription()).isEqualTo("Oil change");
@@ -32,35 +31,35 @@ public class ServiceRequestTest {
 
     @Test
     public void shouldUpdateServiceRequestStatus() {
-        SerRequest request = new SerRequest(1, "Oil change");
+        ServiceRequest request = new ServiceRequest(1, "Oil change");
         serviceRequestService.createServiceRequest(request);
 
         serviceRequestService.updateServiceRequestStatus(1, "Completed");
 
-        SerRequest updatedRequest = serviceRequestService.getServiceRequestById(1);
+        ServiceRequest updatedRequest = serviceRequestService.getServiceRequestById(1);
         assertThat(updatedRequest).isNotNull();
         assertThat(updatedRequest.getStatus()).isEqualTo("Completed");
     }
 
     @Test
     public void shouldGetServiceRequestById() {
-        SerRequest request = new SerRequest(1, "Oil change");
+        ServiceRequest request = new ServiceRequest(1, "Oil change");
         serviceRequestService.createServiceRequest(request);
 
-        SerRequest retrievedRequest = serviceRequestService.getServiceRequestById(1);
+        ServiceRequest retrievedRequest = serviceRequestService.getServiceRequestById(1);
         assertThat(retrievedRequest).isNotNull();
         assertThat(retrievedRequest.getId()).isEqualTo(1);
     }
 
     @Test
     public void shouldGetAllServiceRequests() {
-        SerRequest request1 = new SerRequest(1, "Oil change");
-        SerRequest request2 = new SerRequest(2, "Brake check");
+        ServiceRequest request1 = new ServiceRequest(1, "Oil change");
+        ServiceRequest request2 = new ServiceRequest(2, "Brake check");
         serviceRequestService.createServiceRequest(request1);
         serviceRequestService.createServiceRequest(request2);
 
-        Collection<SerRequest> requests = serviceRequestService.getAllServiceRequests();
+        Collection<ServiceRequest> requests = serviceRequestService.getAllServiceRequests();
         assertThat(requests).hasSize(2);
-        assertThat(requests).extracting(SerRequest::getId).containsExactlyInAnyOrder(1, 2);
+        assertThat(requests).extracting(ServiceRequest::getId).containsExactlyInAnyOrder(1, 2);
     }
 }
