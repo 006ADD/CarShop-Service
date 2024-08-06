@@ -4,20 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+@NoArgsConstructor
+public class SerRequest {
     private int id;
-    private User client;
+    private User user;
     private Car car;
-    private LocalDate orderDate;
+    private String description;
     private String status;
 
-    public Order(int id,  String status) {
+    public SerRequest(int id,String description) {
         this.id = id;
-        this.status = status;
+        this.description=description;
     }
 }
