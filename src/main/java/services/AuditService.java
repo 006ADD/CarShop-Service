@@ -1,35 +1,55 @@
 package services;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import model.AuditLog;
 import model.User;
+import repositories.AuditLogRepository;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuditService {
-    private List<AuditLog> auditLogs = new ArrayList<>();
+
+    private AuditLogRepository auditLogRepository;
 
     public void logAction(User user, String action) {
-        AuditLog log = new AuditLog(auditLogs.size() + 1, user, action, LocalDateTime.now());
-        auditLogs.add(log);
+        AuditLog log = new AuditLog(0, user, action, LocalDateTime.now()); // ID будет задан автоматически
+        try {
+            auditLogRepository.save(log);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Обработка ошибок
+        }
     }
 
     public List<AuditLog> getLogs() {
-        return auditLogs;
+        try {
+            return auditLogRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return List.of(); // Возвращаем пустой список в случае ошибки
+        }
     }
 
     public List<AuditLog> filterLogsByUser(User user) {
-        return auditLogs.stream()
-                .filter(log -> log.getUser().equals(user))
-                .collect(Collectors.toList());
+        try {
+            return auditLogRepository.findByUser(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return List.of(); // Возвращаем пустой список в случае ошибки
+        }
     }
 
     public List<AuditLog> filterLogsByAction(String action) {
-        return auditLogs.stream()
-                .filter(log -> log.getAction().equalsIgnoreCase(action))
-                .collect(Collectors.toList());
+        try {
+            return auditLogRepository.findByAction(action);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return List.of(); // Возвращаем пустой список в случае ошибки
+        }
     }
-
 }

@@ -3,42 +3,32 @@ package services;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import model.User;
+import repositories.UserRepository;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserService {
-
-
-
-    private Map<String, User> users = new HashMap<>();
-
+    private UserRepository userRepository;
     public void registerUser(User user){
-        if(!users.containsKey(user.getName())){
-            users.put(user.getName(), user);
-        }else{
-            System.out.println("Пользователь не существует.");
-        }
+       userRepository.register(user);
     }
 
     public User loginUser(String name, String password){
-        User user = users.get(name);
-        if(user != null && user.getPassword().equals(password)){
-            return user;
-        }else{
-            return null;
-        }
+       return userRepository.login(name,password);
+    }
+
+    public User getUserId(int id){
+        return userRepository.findById(id);
     }
 
     public Collection<User> getAllUsers(){
-        return users.values();
+        return userRepository.findAll();
     }
 
     public void deleteUser(int id){
-        users.remove(id);
+        userRepository.remove(id);
     }
 
 

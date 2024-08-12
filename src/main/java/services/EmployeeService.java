@@ -1,43 +1,36 @@
 package services;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import model.User;
+import repositories.EmployeeRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeService {
-    private Map<Integer, User> employees = new HashMap<>();
+    private  EmployeeRepository employeeRepository;
+
 
     public void addEmployee(User employee) {
-        employees.put(employee.getId(), employee);
+        employeeRepository.add(employee);
     }
 
     public void deleteEmployee(int id) {
-        employees.remove(id);
+        employeeRepository.delete(id);
     }
 
     public void getAllEmployees(){
-        for (Map.Entry<Integer, User> entry : employees.entrySet()) {
-            Integer id = entry.getKey();
-            User user = entry.getValue();
-            System.out.println("ID: " + id + ", User: " + user);
-        }
+        employeeRepository.findAll();
     }
 
     public User getUserById(int employeeId) {
-        return employees.get(employeeId);
+        return employeeRepository.getUserById(employeeId);
     }
 
     public void updateEmployee(int employeeId, String newName, String newContactInfo) {
-        User user = employees.get(employeeId);
-        if (user != null) {
-            if (!newName.isEmpty()) {
-                user.setName(newName);
-            }
-            if (!newContactInfo.isEmpty()) {
-                user.setContactInfo(newContactInfo);
-            }
-            employees.put(employeeId, user);  // Обновляем клиента в коллекции
-        }
+        employeeRepository.update(employeeId,newName,newContactInfo);
     }
 }

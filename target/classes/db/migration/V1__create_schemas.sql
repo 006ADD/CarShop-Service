@@ -1,0 +1,3 @@
+CREATE SCHEMA IF NOT EXISTS entities;
+
+CREATE SCHEMA IF NOT EXISTS schema_migrations;

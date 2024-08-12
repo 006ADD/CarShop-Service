@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: carshopservice
+      POSTGRES_USER: userPostgres
+      POSTGRES_PASSWORD: passwordPostgres
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+
+  app:
+    build: .
+    container_name: yourapp
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/carshopservice
+      DB_USER: userPostgres
+      DB_PASSWORD: passwordPostgres
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

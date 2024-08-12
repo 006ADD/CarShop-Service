@@ -1,43 +1,35 @@
 package services;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import model.User;
+import repositories.ClientRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientService {
-    private final Map<Integer, User> clients = new HashMap<>();
+    private  ClientRepository clientRepository;
 
     public void addClient(User client) {
-        clients.put(client.getId(), client);
+        clientRepository.add(client);
     }
 
     public void updateClient(int id, String newName, String newContactInfo) {
-        User user = clients.get(id);
-        if (user != null) {
-            if (!newName.isEmpty()) {
-                user.setName(newName);
-            }
-            if (!newContactInfo.isEmpty()) {
-                user.setContactInfo(newContactInfo);
-            }
-            clients.put(id, user);  // Обновляем клиента в коллекции
-        }
+        clientRepository.update(id,  newName,newContactInfo);
     }
     public User getUserById(int clientId) {
-        return clients.get(clientId);
+        return clientRepository.getUserById(clientId);
     }
 
     public void deleteClient(int id) {
-        clients.remove(id);
+      clientRepository.delete(id);
     }
 
     public void getAllClient(){
-        for (Map.Entry<Integer, User> entry : clients.entrySet()) {
-            Integer id = entry.getKey();
-            User user = entry.getValue();
-            System.out.println("ID: " + id + ", User: " + user);
-        }
+        clientRepository.findAll();
     }
 
 }
