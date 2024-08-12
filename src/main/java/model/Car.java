@@ -21,4 +21,13 @@ public class Car {
         this.model = model;
         this.year = year;
     }
+
+    public Car(String brand, String model, int year, double price, String condition, String status) {
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.price = price;
+        this.condition = condition;
+        this.status = status;
+    }
 }

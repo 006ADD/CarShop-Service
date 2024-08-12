@@ -18,4 +18,10 @@ public class SerRequest {
         this.id = id;
         this.description=description;
     }
+
+    public SerRequest(int id, String description, String status) {
+        this.id = id;
+        this.description = description;
+        this.status = status;
+    }
 }

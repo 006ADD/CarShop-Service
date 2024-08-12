@@ -11,11 +11,8 @@ public class CarShopApplication {
     private static final CarService carService = new CarService();
     private static final OrderService orderService = new OrderService();
     private static final ServiceRequest serviceRequestService = new ServiceRequest();
-
     private static final ClientService clientService = new ClientService();
     private static final AuditService auditService = new AuditService();
-
-
     private static final EmployeeService employeeService = new EmployeeService();
 
     private static User currentUser;
