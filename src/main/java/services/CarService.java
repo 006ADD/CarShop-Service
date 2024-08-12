@@ -1,10 +1,6 @@
 package services;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import model.Car;
-import repositories.CarRepository;
-import utils.DataSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,28 +8,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class CarService {
-    private CarRepository carRepository;
+    private Map<Integer, Car> cars = new HashMap<>();
 
     public void addCar(Car car) {
-        carRepository.insertCar(car);
+        cars.put(car.getId(), car);
     }
 
     public Car getCar(int id) {
-        return carRepository.findById(id);
+        return cars.get(id);
     }
 
     public List<Car> getAllCars() {
-        return carRepository.findAll();
+        return new ArrayList<>(cars.values());
     }
 
     public void updateCar(int id, Car car) {
-        carRepository.update(id, car);
+        cars.put(id, car);
     }
 
     public void deleteCar(int id) {
-        carRepository.remove(id);
+        cars.remove(id);
+    }
+
+    public List<Car> searchCar(String brand, String model, int year){
+        return cars.values().stream().filter(
+                car -> car.getBrand().equalsIgnoreCase(brand) &&
+                        car.getModel().equalsIgnoreCase(model) &&
+                        car.getYear() == year
+        ).collect(Collectors.toList());
     }
 }
