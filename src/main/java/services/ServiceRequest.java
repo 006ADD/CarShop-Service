@@ -13,8 +13,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class ServiceRequest {
     private ServiceRequestRepository serviceRequestRepository;
-
-
     public void createServiceRequest(SerRequest request) {
         serviceRequestRepository.create(request);    }
 

@@ -1,0 +1,202 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: yourname
+      changes:
+        - createSchema:
+            schemaName: entities
+
+  - changeSet:
+      id: 2
+      author: yourname
+      changes:
+        - createSchema:
+            schemaName: schema_migrations
+
+  - changeSet:
+      id: 3
+      author: yourname
+      changes:
+        - createTable:
+            tableName: users
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: password
+                  type: varchar(255)
+              - column:
+                  name: role
+                  type: varchar(50)
+
+  - changeSet:
+      id: 4
+      author: yourname
+      changes:
+        - createTable:
+            tableName: audit_logs
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: action_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: user_id
+                  type: int
+              - column:
+                  name: action_type
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: text
+            constraints:
+              foreignKey:
+                columns: user_id
+                referencedTableName: users
+                referencedColumnNames: id
+                referencedSchemaName: entities
+
+  - changeSet:
+      id: 5
+      author: yourname
+      changes:
+        - createTable:
+            tableName: cars
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: brand
+                  type: varchar(255)
+              - column:
+                  name: model
+                  type: varchar(255)
+              - column:
+                  name: year
+                  type: int
+              - column:
+                  name: price
+                  type: decimal(10, 2)
+              - column:
+                  name: condition
+                  type: varchar(50)
+              - column:
+                  name: status
+                  type: varchar(50)
+
+  - changeSet:
+      id: 6
+      author: yourname
+      changes:
+        - createTable:
+            tableName: clients
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: contact_info
+                  type: varchar(255)
+
+  - changeSet:
+      id: 7
+      author: yourname
+      changes:
+        - createTable:
+            tableName: employees
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: contact_info
+                  type: varchar(255)
+              - column:
+                  name: role
+                  type: varchar(50)
+
+  - changeSet:
+      id: 8
+      author: yourname
+      changes:
+        - createTable:
+            tableName: orders
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: client_id
+                  type: int
+              - column:
+                  name: car_id
+                  type: int
+              - column:
+                  name: order_date
+                  type: date
+              - column:
+                  name: status
+                  type: varchar(50)
+            constraints:
+              foreignKey:
+                columns: client_id
+                referencedTableName: clients
+                referencedColumnNames: id
+                referencedSchemaName: entities
+              foreignKey:
+                columns: car_id
+                referencedTableName: cars
+                referencedColumnNames: id
+                referencedSchemaName: entities
+
+  - changeSet:
+      id: 9
+      author: yourname
+      changes:
+        - createTable:
+            tableName: service_requests
+            schemaName: entities
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: status
+                  type: varchar(50)

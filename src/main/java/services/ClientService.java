@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import model.User;
 import repositories.ClientRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,8 +27,8 @@ public class ClientService {
       clientRepository.delete(id);
     }
 
-    public void getAllClient(){
-        clientRepository.findAll();
+    public Collection<User> getAllClient(){
+        return clientRepository.findAll();
     }
 
 }

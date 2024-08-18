@@ -6,6 +6,7 @@ import model.User;
 import repositories.EmployeeRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -22,8 +23,8 @@ public class EmployeeService {
         employeeRepository.delete(id);
     }
 
-    public void getAllEmployees(){
-        employeeRepository.findAll();
+    public List<User> getAllEmployees(){
+        return employeeRepository.findAll();
     }
 
     public User getUserById(int employeeId) {
