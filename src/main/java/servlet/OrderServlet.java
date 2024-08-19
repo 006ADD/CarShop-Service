@@ -3,7 +3,10 @@ package servlet;
 import model.Car;
 import model.Order;
 import model.User;
+import dto.OrderDTO;
 import services.*;
+import mapper.OrderMapper;
+import mapper.OrderMapperImpl;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,12 +17,14 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/order")
 public class OrderServlet extends HttpServlet {
     private final OrderService orderService = new OrderService();
     private final CarService carService = new CarService();
     private final AuditService auditService = new AuditService();
+    private final OrderMapper orderMapper = new OrderMapperImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -69,7 +74,8 @@ public class OrderServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "No orders found");
                 return;
             }
-            request.setAttribute("orders", orders);
+            List<OrderDTO> orderDTOs = orders.stream().map(orderMapper::toOrderDTO).collect(Collectors.toList());
+            request.setAttribute("orders", orderDTOs);
             request.getRequestDispatcher("/viewAllOrders.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error retrieving orders");

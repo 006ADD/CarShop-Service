@@ -1,6 +1,9 @@
 package servlet;
 
+import mapper.CarMapper;
+import mapper.mapperImpl.CarMapperImpl;
 import model.Car;
+import dto.CarDTO;
 import services.*;
 import model.User;
 
@@ -17,6 +20,7 @@ import java.util.Collection;
 public class CarServlet extends HttpServlet {
     private final CarService carService = new CarService();
     private final AuditService auditService = new AuditService();
+    private final CarMapper carMapper = new CarMapperImpl(); // Use the mapper implementation
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,25 +54,30 @@ public class CarServlet extends HttpServlet {
 
     private void addCar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String brand = request.getParameter("brand");
-            String model = request.getParameter("model");
-            int year = Integer.parseInt(request.getParameter("year"));
-            double price = Double.parseDouble(request.getParameter("price"));
-            String condition = request.getParameter("condition");
-            String status = request.getParameter("status");
+            CarDTO carDTO = new CarDTO(
+                    0, // ID will be auto-generated
+                    request.getParameter("brand"),
+                    request.getParameter("model"),
+                    Integer.parseInt(request.getParameter("year")),
+                    Double.parseDouble(request.getParameter("price")),
+                    request.getParameter("condition"),
+                    request.getParameter("status")
+            );
 
-            if (brand == null || model == null || year <= 0 || price <= 0 || condition == null || status == null) {
+            Car car = carMapper.toCar(carDTO);
+
+            if (car.getBrand() == null || car.getModel() == null || car.getYear() <= 0 || car.getPrice() <= 0 || car.getCondition() == null || car.getStatus() == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or invalid parameters");
                 return;
             }
 
-            Car car = new Car(carService.getAllCars().size() + 1, brand, model, year, price, condition, status);
+            car.setId(carService.getAllCars().size() + 1); // Set ID
             carService.addCar(car);
 
             HttpSession session = request.getSession();
             User currentUser = (User) session.getAttribute("user");
             if (currentUser != null) {
-                auditService.logAction(currentUser, "A car has been added: " + brand + " " + model);
+                auditService.logAction(currentUser, "A car has been added: " + car.getBrand() + " " + car.getModel());
             }
 
             response.setStatus(HttpServletResponse.SC_CREATED);
@@ -82,27 +91,29 @@ public class CarServlet extends HttpServlet {
 
     private void editCar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            String brand = request.getParameter("brand");
-            String model = request.getParameter("model");
-            int year = Integer.parseInt(request.getParameter("year"));
-            double price = Double.parseDouble(request.getParameter("price"));
-            String condition = request.getParameter("condition");
-            String status = request.getParameter("status");
+            CarDTO carDTO = new CarDTO(
+                    Integer.parseInt(request.getParameter("id")),
+                    request.getParameter("brand"),
+                    request.getParameter("model"),
+                    Integer.parseInt(request.getParameter("year")),
+                    Double.parseDouble(request.getParameter("price")),
+                    request.getParameter("condition"),
+                    request.getParameter("status")
+            );
 
-            Car car = carService.getCar(id);
-            if (car == null) {
+            Car updatedCar = carMapper.toCar(carDTO);
+            Car existingCar = carService.getCar(updatedCar.getId());
+            if (existingCar == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Car not found");
                 return;
             }
 
-            Car updatedCar = new Car(id, brand, model, year, price, condition, status);
-            carService.updateCar(id, updatedCar);
+            carService.updateCar(updatedCar.getId(), updatedCar);
 
             HttpSession session = request.getSession();
             User currentUser = (User) session.getAttribute("user");
             if (currentUser != null) {
-                auditService.logAction(currentUser, "The car ID has been edited: " + id);
+                auditService.logAction(currentUser, "The car ID has been edited: " + updatedCar.getId());
             }
 
             response.setStatus(HttpServletResponse.SC_OK);
