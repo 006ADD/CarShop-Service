@@ -1,6 +1,8 @@
 package services;
 
+import lombok.AllArgsConstructor;
 import model.Car;
+import repositories.CarRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,11 +17,15 @@ import java.util.stream.Collectors;
  * Автомобили хранятся в внутренней структуре данных, основанной на карте, где ключом является уникальный идентификатор автомобиля.
  * </p>
  */
+@AllArgsConstructor
 public class CarService {
     /**
      * Карта, хранящая автомобили по их уникальным идентификаторам.
      */
+
+    private final CarRepository carRepository;
     private Map<Integer, Car> cars = new HashMap<>();
+
 
     /**
      * Добавляет новый автомобиль в сервис.
@@ -30,7 +36,7 @@ public class CarService {
      * @param car Автомобиль, который необходимо добавить.
      */
     public void addCar(Car car) {
-        cars.put(car.getId(), car);
+        carRepository.insertCar(car);
     }
 
     /**
@@ -40,7 +46,7 @@ public class CarService {
      * @return Автомобиль с указанным идентификатором или {@code null}, если автомобиль не найден.
      */
     public Car getCar(int id) {
-        return cars.get(id);
+        return carRepository.findById(id);
     }
 
     /**
@@ -49,7 +55,7 @@ public class CarService {
      * @return Список всех автомобилей.
      */
     public List<Car> getAllCars() {
-        return new ArrayList<>(cars.values());
+        return carRepository.findAll();
     }
 
     /**
@@ -62,7 +68,7 @@ public class CarService {
      * @param car Автомобиль с новой информацией.
      */
     public void updateCar(int id, Car car) {
-        cars.put(id, car);
+        carRepository.update(id, car);
     }
 
     /**
@@ -71,7 +77,7 @@ public class CarService {
      * @param id Уникальный идентификатор автомобиля.
      */
     public void deleteCar(int id) {
-        cars.remove(id);
+        carRepository.remove(id);
     }
 
     /**
