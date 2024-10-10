@@ -11,7 +11,7 @@ import java.util.Collection;
 @NoArgsConstructor
 public class UserService {
     private UserRepository userRepository;
-    public void registerUser(User user){
+    public User registerUser(User user){
        userRepository.register(user);
     }
 
